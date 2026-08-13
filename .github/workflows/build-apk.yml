@@ -1,0 +1,46 @@
+name: Android APK Olustur
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "El-Teremini-v0.2-source.zip"
+      - ".github/workflows/build-apk.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Depoyu indir
+        uses: actions/checkout@v4
+
+      - name: Java 17 kur
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Projeyi ac
+        run: |
+          mkdir extracted-project
+          unzip -o El-Teremini-v0.2-source.zip -d extracted-project
+
+      - name: Gradle kur
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+
+      - name: APK olustur
+        working-directory: extracted-project
+        run: gradle assembleDebug --stacktrace
+
+      - name: APK dosyasini yukle
+        uses: actions/upload-artifact@v4
+        with:
+          name: El-Teremini-v0.2-debug
+          path: extracted-project/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
