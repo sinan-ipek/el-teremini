@@ -35,12 +35,12 @@ jobs:
           gradle-version: "8.9"
 
       - name: APK olustur
-        working-directory: extracted-project
+        working-directory: extracted-project/El-Teremini-v0.2-source
         run: gradle assembleDebug --stacktrace
 
       - name: APK dosyasini yukle
         uses: actions/upload-artifact@v4
         with:
           name: El-Teremini-v0.2-debug
-          path: extracted-project/app/build/outputs/apk/debug/app-debug.apk
+          path: extracted-project/El-Teremini-v0.2-source/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
